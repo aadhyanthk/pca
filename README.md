@@ -6,8 +6,6 @@
 [![GitHub](https://img.shields.io/badge/Source_Code-GitHub-181717?style=for-the-badge&logo=github)](https://github.com/aadhyanthk/pca)
 [![Build](https://img.shields.io/badge/build-npm%20run%20build-success?style=for-the-badge&logo=vite)](https://github.com/aadhyanthk/pca)
 
-> **Note:** Replace `https://YOUR_VERCEL_DEPLOYMENT.vercel.app` with your real Vercel URL after deployment. To show a **GitHub Actions** build badge, add a workflow (for example `.github/workflows/ci.yml`) that runs `npm ci` and `npm run build`, then use the workflow status badge from your repo’s **Actions** tab.
-
 ---
 
 ## Interactive features overview
@@ -19,8 +17,6 @@ PCA Educator is a single-page experience with a bottom navigation bar. Highlight
 | **Learn** | Full in-app syllabus: intro, key concepts, objectives, PCA steps, worked examples, scree plots, reconstruction, assumptions, applications, and wrap-up—with sidebar jump links. |
 | **Step-by-step simulation** | Paste or upload CSV data, run **Start Simulation**, and watch timed reveals: parsed data → z-score standardization → covariance matrix → eigen-decomposition → explained-variance bar chart → **PC1/PC2** projection with scatter plot. |
 | **CSV export** | After the final step, **Download Exact PCA_Result.csv** builds a grid (raw data, standardized matrix, covariance, eigenvalues/vectors, variance ratios, short annotations) and triggers a browser download. |
-
-**Suggested polish for your portfolio:** Add a short screen recording (GIF or MP4) or a few screenshots of the **Learn** syllabus, **Simulate** steps, and the download button to this section so reviewers see the app before cloning.
 
 ---
 
@@ -102,8 +98,6 @@ npm run lint     # ESLint
 | Guhan PC | 24BYB1052 | Full-stack / UI implementation |
 | SS Kishore Kumar | 24BYB1007 | Content & Learn curriculum |
 | Niranjan N | 24BYB1111 | Math logic & simulation QA |
-
-*Adjust role labels if your course or team uses different titles—the IDs match the in-app **About** page.*
 
 ---
 
