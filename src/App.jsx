@@ -229,7 +229,7 @@ const LearnPage = () => {
           <h2>Objective of PCA</h2>
           <p>PCA finds directions that maximize variance. The first principal component w₁ is found by solving for the direction that maximizes variance under a unit vector constraint:</p>
           <div className="math-block">
-            max w<sup>T</sup>&Sigma;w subject to ||w|| = 1
+            max w<sup>T</sup>&Sigma;w &nbsp; | &nbsp; ||w|| = 1
           </div>
         </section>
 
