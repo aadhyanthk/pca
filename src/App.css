@@ -189,3 +189,19 @@ body {
   margin: 2rem 0;
   box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
 }
+
+.content-list {
+  margin-left: 2rem;
+  margin-bottom: 2rem;
+  color: #4a5568;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+.content-list li {
+  margin-bottom: 0.75rem;
+}
+
+.content-list strong {
+  color: #2d3748;
+}

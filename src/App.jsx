@@ -47,11 +47,15 @@ const LearnPage = () => {
   };
 
   const sections = [
+    {id: 'intro', title: 'Introduction'},
+    {id: 'math', title: 'The Mathematics of PCA'},
     {id: 'step-1', title: '1. Standardization'},
     {id: 'step-2', title: '2. Covariance Matrix'},
     {id: 'step-3', title: '3. Eigen Decomposition'},
     {id: 'step-4', title: '4. Feature Vector'},
-    {id: 'step-5', title: '5. Recasting Data'}
+    {id: 'step-5', title: '5. Recasting Data'},
+    {id: 'use-cases', title: 'Example Use Cases'},
+    {id: 'conclusion', title: 'Conclusion'}
   ];
 
   return (
@@ -70,8 +74,17 @@ const LearnPage = () => {
       </aside>
       
       <main className="learn-content">
-        <h1>The Mathematics of PCA</h1>
-        <p className="intro-text">Principal Component Analysis (PCA) is a dimensionality reduction technique that transforms a large set of variables into a smaller one that still contains most of the information. Here is the mechanical breakdown of the algorithm.</p>
+        <h1>Learn Principal Component Analysis</h1>
+
+        <section id="intro">
+          <h2>Introduction</h2>
+          <p>Principal Component Analysis (PCA) is a powerful statistical technique used primarily for dimensionality reduction in machine learning and data analysis. When dealing with complex datasets containing numerous variables, it becomes challenging to visualize and process the information. PCA elegantly solves this by transforming the large set of variables into a smaller, more manageable set called "principal components," while retaining as much of the original dataset's variation as possible.</p>
+        </section>
+
+        <section id="math">
+          <h2>The Mathematics of PCA</h2>
+          <p className="intro-text">Here is the mechanical breakdown of the algorithm, detailing how data is transformed step by step.</p>
+        </section>
 
         <section id="step-1">
           <h2>1. Standardization</h2>
@@ -112,6 +125,22 @@ const LearnPage = () => {
           <div className="math-block">
             Y = Z &middot; W
           </div>
+        </section>
+
+        <section id="use-cases">
+          <h2>Example Use Cases</h2>
+          <p>PCA is highly versatile and is deployed across various domains to streamline data:</p>
+          <ul className="content-list">
+            <li><strong>Image Compression:</strong> Reducing the number of pixels required to render an image without losing significant visual fidelity.</li>
+            <li><strong>Genomics:</strong> Visualizing genetic distance and relatedness between populations by condensing thousands of DNA markers.</li>
+            <li><strong>Finance:</strong> Identifying underlying market trends and managing risk by analyzing the correlations between different stocks or assets.</li>
+            <li><strong>Facial Recognition:</strong> Extracting the most critical features from facial images (Eigenfaces) to match identities efficiently.</li>
+          </ul>
+        </section>
+
+        <section id="conclusion">
+          <h2>Conclusion</h2>
+          <p>By effectively compressing data and eliminating noise, PCA serves as an essential preprocessing step for many advanced machine learning models. Understanding its underlying mechanics allows us to make informed decisions about when and how to apply dimensionality reduction to our datasets. Once you are comfortable with these concepts, you can proceed to the Simulation environment to observe these transformations in action.</p>
         </section>
       </main>
     </div>
