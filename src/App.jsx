@@ -59,7 +59,7 @@ const performPCA = (data) => {
     }
   }
 
-  let eigen = keys.map((_, i) => ({ value: M[i][i], vector: e.map((row) => row[i]) }));
+  let eigen = keys.map((_, i) => ({value: M[i][i], vector: e.map((row) => row[i])}));
   eigen.sort((a, b) => b.value - a.value);
   const totalVar = eigen.reduce((s, ev) => s + ev.value, 0) || 1;
   eigen.forEach((ev) => ev.ratio = ev.value / totalVar);
@@ -71,12 +71,12 @@ const performPCA = (data) => {
     };
   });
 
-  return { keys, standardized, cov, eigen, projected };
+  return {keys, standardized, cov, eigen, projected};
 };
 
 // --- VISUALIZATION COMPONENTS ---
 const ScatterPlot = ({data}) => {
-  const padding = 30;
+  const padding = 45; // Increased padding for axis labels
   const width = 400, height = 300;
   const minX = Math.min(...data.map((d) => d.PC1));
   const maxX = Math.max(...data.map((d) => d.PC1));
@@ -85,11 +85,39 @@ const ScatterPlot = ({data}) => {
   
   const scaleX = (x) => padding + ((x - minX) / (maxX - minX || 1)) * (width - padding * 2);
   const scaleY = (y) => height - padding - ((y - minY) / (maxY - minY || 1)) * (height - padding * 2);
+
+  const xTicks = [minX, (minX + maxX) / 2, maxX];
+  const yTicks = [minY, (minY + maxY) / 2, maxY];
   
   return (
     <div className="chart-container">
       <h4>Projected Data (PC1 vs PC2)</h4>
       <svg width={width} height={height} className="raw-chart">
+        {/* Grid Axes */}
+        <line x1={padding} y1={height - padding} x2={width - padding} y2={height - padding} stroke="#475569" strokeWidth="1" />
+        <line x1={padding} y1={padding} x2={padding} y2={height - padding} stroke="#475569" strokeWidth="1" />
+        
+        {/* X Ticks & Scale */}
+        {xTicks.map((t, i) => (
+          <g key={`x-${i}`}>
+            <line x1={scaleX(t)} y1={height - padding} x2={scaleX(t)} y2={height - padding + 5} stroke="#475569" />
+            <text x={scaleX(t)} y={height - padding + 20} textAnchor="middle" fontSize="10" fill="#94a3b8">{t.toFixed(2)}</text>
+          </g>
+        ))}
+        
+        {/* Y Ticks & Scale */}
+        {yTicks.map((t, i) => (
+          <g key={`y-${i}`}>
+            <line x1={padding - 5} y1={scaleY(t)} x2={padding} y2={scaleY(t)} stroke="#475569" />
+            <text x={padding - 10} y={scaleY(t) + 3} textAnchor="end" fontSize="10" fill="#94a3b8">{t.toFixed(2)}</text>
+          </g>
+        ))}
+
+        {/* Labels */}
+        <text x={width / 2} y={height - 5} textAnchor="middle" fontSize="12" fontWeight="bold" fill="#e2e8f0">PC1</text>
+        <text x={12} y={height / 2} textAnchor="middle" fontSize="12" fontWeight="bold" fill="#e2e8f0" transform={`rotate(-90, 12, ${height/2})`}>PC2</text>
+
+        {/* Data Points */}
         {data.map((d, i) => (
           <circle key={i} cx={scaleX(d.PC1)} cy={scaleY(d.PC2)} r={5} fill="#60a5fa" opacity={0.8} />
         ))}
