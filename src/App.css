@@ -380,3 +380,227 @@ body {
 .download-btn:hover {
   background-color: #2f855a;
 }
+
+/* Updated Simulation Dashboard Styles */
+.sim-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.sim-dashboard {
+  display: flex;
+  flex-direction: column; /* Forces vertical stacking */
+  gap: 2rem;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.sim-controls {
+  width: 100%; /* Take full width */
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.csv-input {
+  width: 100%;
+  height: 150px;
+  margin: 1rem 0;
+  padding: 0.75rem;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+.sim-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.file-input {
+  display: none;
+}
+
+.upload-btn, .start-btn, .download-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.upload-btn {
+  background-color: #edf2f7;
+  color: #4a5568;
+}
+
+.upload-btn:hover {
+  background-color: #e2e8f0;
+}
+
+.start-btn {
+  background-color: #3182ce;
+  color: #ffffff;
+}
+
+.start-btn:hover:not(:disabled) {
+  background-color: #2b6cb0;
+}
+
+.start-btn:disabled {
+  background-color: #a0aec0;
+  cursor: not-allowed;
+}
+
+.sim-viewer {
+  width: 100%; /* Take full width */
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.sim-steps-container {
+  margin: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sim-step {
+  padding: 1.25rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #3182ce;
+  border-radius: 4px;
+}
+
+.step-title {
+  font-weight: bold;
+  color: #2c5282;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+/* Math Tables & Inner Workings */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto; /* Allows horizontal scrolling for wide matrices */
+  background: #ffffff;
+  border-radius: 4px;
+  padding: 0.5rem;
+}
+
+.math-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+}
+
+.math-table th, .math-table td {
+  padding: 8px 12px;
+  text-align: right;
+  border: 1px solid #edf2f7;
+}
+
+.math-table th {
+  background-color: #f1f5f9;
+  color: #4a5568;
+  font-weight: 600;
+}
+
+.math-table tr:hover {
+  background-color: #f8fafc;
+}
+
+.muted-text {
+  font-size: 0.85rem;
+  color: #718096;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.visualizations {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.split-view {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.split-table {
+  flex: 1;
+  min-width: 300px;
+}
+
+.split-chart {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  min-width: 300px;
+}
+
+.chart-container {
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.chart-container h4 {
+  margin-bottom: 1rem;
+  color: #4a5568;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.raw-chart {
+  background: #f8fafc;
+  border-radius: 4px;
+}
+
+.download-section {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.download-btn {
+  background-color: #38a169;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.05rem;
+}
+
+.download-btn:hover {
+  background-color: #2f855a;
+}

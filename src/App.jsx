@@ -183,7 +183,7 @@ const SimulatePage = () => {
   useEffect(() => {
     let timer;
     if (isPlaying && step < 5) {
-      timer = setTimeout(() => setStep((s) => s + 1), 1500);
+      timer = setTimeout(() => setStep((s) => s + 1), 2000); // Increased delay slightly to read tables
     } else if (step === 5) {
       setIsPlaying(false);
     }
@@ -227,12 +227,10 @@ const SimulatePage = () => {
     const n = parsedData.length;
     const grid = Array.from({length: n + 30}, () => Array(25).fill(''));
     
-    // Initial Data Block
     grid[0][0] = 'Initial Data:';
     keys.forEach((k, i) => grid[1][i] = k);
     parsedData.forEach((row, i) => keys.forEach((k, j) => grid[i + 2][j] = row[k]));
     
-    // Calculation Block
     const rStart = n + 3; 
     grid[rStart][0] = 'Standardized Data:';
     grid[rStart][5] = 'Covariance Matrix';
@@ -259,7 +257,6 @@ const SimulatePage = () => {
       grid[rStart + 2 + i][19] = `PC${i + 1}`;
     });
     
-    // Footer Context
     const textStart = rStart + keys.length + 3;
     if (grid.length > textStart + 4) {
       grid[textStart][10] = 'Av=λv';
@@ -282,12 +279,59 @@ const SimulatePage = () => {
     document.body.removeChild(link);
   };
 
+  const renderDataPreview = (dataArray, limit = 5) => {
+    if (!dataArray || dataArray.length === 0) return null;
+    const keys = Object.keys(dataArray[0]);
+    return (
+      <div className="table-wrapper">
+        <table className="math-table">
+          <thead>
+            <tr>{keys.map(k => <th key={k}>{k}</th>)}</tr>
+          </thead>
+          <tbody>
+            {dataArray.slice(0, limit).map((row, i) => (
+              <tr key={i}>{keys.map(k => <td key={k}>{Number(row[k]).toFixed(4)}</td>)}</tr>
+            ))}
+          </tbody>
+        </table>
+        {dataArray.length > limit && <div className="muted-text">... showing {limit} of {dataArray.length} rows</div>}
+      </div>
+    );
+  };
+
+  const renderMatrix = (matrix, rowLabels, colLabels) => {
+    return (
+      <div className="table-wrapper">
+        <table className="math-table">
+          <thead>
+            <tr>
+              <th></th>
+              {colLabels.map(l => <th key={l}>{l}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {matrix.map((row, i) => (
+              <tr key={i}>
+                <th>{rowLabels[i]}</th>
+                {row.map((val, j) => <td key={j}>{Number(val).toFixed(4)}</td>)}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
   return (
     <main className="page-content">
-      <h1>Simulation Environment</h1>
+      <div className="sim-header">
+        <h1>Simulation Environment</h1>
+        <p>Input your data below and observe the mathematical transformations.</p>
+      </div>
+      
       <div className="sim-dashboard">
         <div className="sim-controls">
-          <h3>Input Dataset (CSV Format)</h3>
+          <h3>1. Input Dataset (CSV Format)</h3>
           <textarea 
             value={inputText} 
             onChange={(e) => setInputText(e.target.value)}
@@ -302,30 +346,92 @@ const SimulatePage = () => {
           </div>
         </div>
 
-        <div className="sim-viewer">
-          <h3>Algorithm Execution</h3>
-          <div className="sim-steps-container">
-            {step >= 0 && <div className="sim-step fade-in">1. Data Parsed ({parsedData.length} rows loaded)</div>}
-            {step >= 1 && <div className="sim-step fade-in">2. Data Standardized (Mean centered & scaled)</div>}
-            {step >= 2 && <div className="sim-step fade-in">3. Covariance Matrix Calculated</div>}
-            {step >= 3 && <div className="sim-step fade-in">4. Eigen Decomposition Complete</div>}
-            {step >= 4 && <div className="sim-step fade-in">5. Principal Components Selected</div>}
-            {step >= 5 && <div className="sim-step fade-in">6. Final Projection Rendered</div>}
-          </div>
+        {step >= 0 && results && (
+          <div className="sim-viewer">
+            <h3>2. Algorithm Execution</h3>
+            <div className="sim-steps-container">
+              
+              {step >= 0 && (
+                <div className="sim-step fade-in">
+                  <div className="step-title">Step 1: Data Parsed</div>
+                  {renderDataPreview(parsedData)}
+                </div>
+              )}
 
-          <div className="visualizations">
-             {step >= 4 && results && <BarChart data={results.eigen} />}
-             {step >= 5 && results && <ScatterPlot data={results.projected} />}
-          </div>
+              {step >= 1 && (
+                <div className="sim-step fade-in">
+                  <div className="step-title">Step 2: Data Standardized (Z-Score)</div>
+                  {renderDataPreview(results.standardized)}
+                </div>
+              )}
 
-          {step >= 5 && (
-            <div className="download-section fade-in">
-              <button onClick={generateDownload} className="download-btn">
-                <Download size={18} /> Download Exact PCA_Result.csv
-              </button>
+              {step >= 2 && (
+                <div className="sim-step fade-in">
+                  <div className="step-title">Step 3: Covariance Matrix</div>
+                  {renderMatrix(results.cov, results.keys, results.keys)}
+                </div>
+              )}
+
+              {step >= 3 && (
+                <div className="sim-step fade-in">
+                  <div className="step-title">Step 4: Eigen Decomposition</div>
+                  <div className="table-wrapper">
+                    <table className="math-table">
+                      <thead>
+                        <tr>
+                          <th>Component</th>
+                          <th>Eigenvalue (&lambda;)</th>
+                          <th>Eigenvector (v)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {results.eigen.map((e, i) => (
+                          <tr key={i}>
+                            <td>PC{i + 1}</td>
+                            <td>{Number(e.value).toFixed(4)}</td>
+                            <td>[{e.vector.map(v => Number(v).toFixed(3)).join(', ')}]</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {step >= 4 && (
+                <div className="sim-step fade-in">
+                  <div className="step-title">Step 5: Principal Components Selected</div>
+                  <div className="visualizations">
+                    <BarChart data={results.eigen} />
+                  </div>
+                </div>
+              )}
+
+              {step >= 5 && (
+                <div className="sim-step fade-in">
+                  <div className="step-title">Step 6: Final Projection (Recasting Data)</div>
+                  <div className="split-view">
+                    <div className="split-table">
+                      {renderDataPreview(results.projected)}
+                    </div>
+                    <div className="split-chart">
+                      <ScatterPlot data={results.projected} />
+                    </div>
+                  </div>
+                </div>
+              )}
+
             </div>
-          )}
-        </div>
+
+            {step >= 5 && (
+              <div className="download-section fade-in">
+                <button onClick={generateDownload} className="download-btn">
+                  <Download size={18} /> Download Exact PCA_Result.csv
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </main>
   );
