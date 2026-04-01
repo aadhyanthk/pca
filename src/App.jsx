@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Home, BookOpen, Activity, Download, Info} from 'lucide-react';
+import {Home, BookOpen, Activity, Download, Info, User} from 'lucide-react';
 import './App.css';
 
 // --- NATIVE PCA ENGINE ---
@@ -581,14 +581,42 @@ const SimulatePage = () => {
   );
 };
 
-const AboutPage = () => (
-  <main className="page-content center-content">
-    <h1>About</h1>
-  </main>
-);
+const AboutPage = () => {
+  const teamMembers = [
+    {name: 'Aadhyanth K', id: '24BYB1098'},
+    {name: 'Guhan PC', id: '24BYB1052'},
+    {name: 'SS Kishore Kumar', id: '24BYB1007'},
+    {name: 'Niranjan N', id: '24BYB1111'}
+  ];
+
+  const getInitials = (name) => {
+    return name.split(' ').map((n) => n[0]).join('').substring(0, 2).toUpperCase();
+  };
+
+  return (
+    <main className="page-content center-content about-page">
+      <div className="about-header">
+        <h1>About Us</h1>
+        <p>We are a dedicated team of developers committed to making complex machine learning algorithms like Principal Component Analysis accessible and interactive for all students.</p>
+      </div>
+      
+      <div className="team-grid">
+        {teamMembers.map((member) => (
+          <div className="team-card" key={member.id}>
+            <div className="avatar">
+              {getInitials(member.name)}
+            </div>
+            <h3>{member.name}</h3>
+            <p className="member-id">{member.id}</p>
+          </div>
+        ))}
+      </div>
+    </main>
+  );
+};
 
 const App = () => {
-  const [currentPage, setCurrentPage] = useState('simulate');
+  const [currentPage, setCurrentPage] = useState('about');
 
   const renderPage = () => {
     switch (currentPage) {
