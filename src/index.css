@@ -1,117 +1,111 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,700;12..96,800&display=swap');
-
 :root {
-  --bg: #07090f;
-  --surface: #0d1117;
-  --surface2: #111827;
-  --surface3: #1a2236;
-  --border: #1e2d45;
-  --border2: #253352;
-  --accent: #00e5ff;
-  --accent2: #8b5cf6;
-  --text: #e2e8f0;
-  --text-muted: #64748b;
-  --text-dim: #94a3b8;
-}
+  --text: #6b6375;
+  --text-h: #08060d;
+  --bg: #fff;
+  --border: #e5e4e7;
+  --code-bg: #f4f3ec;
+  --accent: #aa3bff;
+  --accent-bg: rgba(170, 59, 255, 0.1);
+  --accent-border: rgba(170, 59, 255, 0.5);
+  --social-bg: rgba(244, 243, 236, 0.5);
+  --shadow:
+    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { height: 100%; }
-body {
-  font-family: 'Bricolage Grotesque', sans-serif;
-  background: var(--bg);
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  font: 18px/145% var(--sans);
+  letter-spacing: 0.18px;
+  color-scheme: light dark;
   color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #9ca3af;
+    --text-h: #f3f4f6;
+    --bg: #16171d;
+    --border: #2e303a;
+    --code-bg: #1f2028;
+    --accent: #c084fc;
+    --accent-bg: rgba(192, 132, 252, 0.15);
+    --accent-border: rgba(192, 132, 252, 0.5);
+    --social-bg: rgba(47, 48, 58, 0.5);
+    --shadow:
+      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+  }
+
+  #social .button-icon {
+    filter: invert(1) brightness(2);
+  }
+}
+
+body {
+  margin: 0;
+}
+
+#root {
+  width: 1126px;
+  max-width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  border-inline: 1px solid var(--border);
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
+  box-sizing: border-box;
 }
 
-nav {
-  display: flex;
-  align-items: center;
-  padding: 0 24px;
-  height: 52px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-  gap: 4px;
-  position: relative;
-  z-index: 100;
-}
-
-.nav-logo {
-  font-size: 17px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  margin-right: 20px;
-}
-.nav-logo .hi { color: var(--accent); }
-.nav-logo .lo { color: var(--text-muted); font-weight: 400; font-size: 13px; }
-
-.nav-links { display: flex; gap: 2px; flex: 1; }
-.nav-btn {
-  font-family: 'DM Mono', monospace;
-  font-size: 11px;
-  padding: 6px 14px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  background: transparent;
-  color: var(--text-muted);
-  transition: all 0.18s;
-}
-.nav-btn:hover { background: var(--surface3); color: var(--text); }
-.nav-btn.active { background: var(--surface3); color: var(--accent); border: 1px solid var(--border2); }
-
-.page { display: none; flex: 1; overflow: hidden; flex-direction: column; }
-.page.active { display: flex; }
-
-/* Home Specifics */
-#page-home {
-  background: radial-gradient(ellipse at 20% 50%, #0d1f3c 0%, var(--bg) 60%),
-              radial-gradient(ellipse at 80% 20%, #1a0d3c 0%, transparent 50%);
-  position: relative;
-  overflow-y: auto;
-}
-.home-inner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100%;
-  padding: 40px 24px;
-  position: relative;
-  z-index: 2;
-}
-.home-content { text-align: center; max-width: 760px; width: 100%; }
-.home-title { font-size: clamp(36px, 6vw, 68px); font-weight: 800; margin-bottom: 20px; }
-.home-title .grad {
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 60%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-}
-.home-sub { color: var(--text-dim); line-height: 1.7; margin-bottom: 36px; }
-
-.btn-primary {
-  font-family: 'DM Mono', monospace;
-  font-size: 12px;
-  padding: 12px 28px;
-  background: var(--accent);
-  color: #000;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+h1,
+h2 {
+  font-family: var(--heading);
   font-weight: 500;
-  transition: all 0.2s;
+  color: var(--text-h);
 }
-.btn-primary:hover { background: #00c8e0; transform: translateY(-1px); }
 
-/* Sim Specifics */
-.sim-layout { display: flex; flex: 1; overflow: hidden; }
-.sim-canvas-wrap { flex: 1; position: relative; overflow: hidden; }
-#simCanvas { width: 100%; height: 100%; cursor: crosshair; display: block; }
-.sim-sidebar {
-  width: 300px;
-  background: var(--surface);
-  border-left: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
+h1 {
+  font-size: 56px;
+  letter-spacing: -1.68px;
+  margin: 32px 0;
+  @media (max-width: 1024px) {
+    font-size: 36px;
+    margin: 20px 0;
+  }
+}
+h2 {
+  font-size: 24px;
+  line-height: 118%;
+  letter-spacing: -0.24px;
+  margin: 0 0 8px;
+  @media (max-width: 1024px) {
+    font-size: 20px;
+  }
+}
+p {
+  margin: 0;
+}
+
+code,
+.counter {
+  font-family: var(--mono);
+  display: inline-flex;
+  border-radius: 4px;
+  color: var(--text-h);
+}
+
+code {
+  font-size: 15px;
+  line-height: 135%;
+  padding: 4px 8px;
+  background: var(--code-bg);
 }
