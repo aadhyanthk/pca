@@ -7,7 +7,6 @@ const performPCA = (data) => {
   const keys = Object.keys(data[0]).filter((k) => !isNaN(Number(data[0][k])));
   const n = data.length;
   
-  // 1. Standardize (Mean centering & scaling)
   const means = keys.map((k) => data.reduce((sum, row) => sum + Number(row[k]), 0) / n);
   const stds = keys.map((k, i) => {
     const variance = data.reduce((sum, row) => sum + Math.pow(Number(row[k]) - means[i], 2), 0) / (n - 1);
@@ -20,12 +19,10 @@ const performPCA = (data) => {
     return obj;
   });
 
-  // 2. Covariance Matrix
   const cov = keys.map((_, i) => keys.map((_, j) => {
     return standardized.reduce((sum, row) => sum + row[keys[i]] * row[keys[j]], 0) / (n - 1);
   }));
 
-  // 3. Eigen Decomposition (Jacobi Algorithm)
   let max_iter = 100, m_dim = keys.length;
   let e = keys.map((_, i) => keys.map((_, j) => i === j ? 1 : 0));
   let M = cov.map((row) => [...row]);
@@ -62,13 +59,11 @@ const performPCA = (data) => {
     }
   }
 
-  // 4. Feature Vector Selection
   let eigen = keys.map((_, i) => ({ value: M[i][i], vector: e.map((row) => row[i]) }));
   eigen.sort((a, b) => b.value - a.value);
   const totalVar = eigen.reduce((s, ev) => s + ev.value, 0) || 1;
   eigen.forEach((ev) => ev.ratio = ev.value / totalVar);
 
-  // 5. Recast Data
   const projected = standardized.map((row) => {
     return {
       PC1: keys.reduce((s, k, i) => s + row[k] * eigen[0].vector[i], 0),
@@ -130,7 +125,7 @@ const BarChart = ({data}) => {
   );
 };
 
-// --- PAGES ---
+// --- NAVIGATION ---
 const Navbar = ({currentPage, setCurrentPage}) => {
   const navItems = [
     {name: 'Home', id: 'home', icon: <Home size={18} />},
@@ -159,12 +154,156 @@ const Navbar = ({currentPage, setCurrentPage}) => {
   );
 };
 
+// --- PAGES ---
 const HomePage = () => (
   <main className="page-content center-content">
     <h1>Principal Component Analysis</h1>
     <p>Welcome to the interactive PCA learning environment.</p>
   </main>
 );
+
+const LearnPage = () => {
+  const scrollToSection = (e, id) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      // Adjusted scroll position to account for sticky navbar
+      const y = element.getBoundingClientRect().top + window.scrollY - 90;
+      window.scrollTo({top: y, behavior: 'smooth'});
+    }
+  };
+
+  const sections = [
+    {id: 'intro', title: 'Introduction'},
+    {id: 'concepts', title: 'Key Concepts'},
+    {id: 'objective', title: 'Objective of PCA'},
+    {id: 'steps', title: 'The Algorithm'},
+    {id: 'example', title: 'Worked Example'},
+    {id: 'selection', title: 'Scree Plot & Selection'},
+    {id: 'reconstruction', title: 'Reconstruction'},
+    {id: 'assumptions', title: 'Assumptions'},
+    {id: 'applications', title: 'Applications'},
+    {id: 'conclusion', title: 'Conclusion'}
+  ];
+
+  return (
+    <div className="learn-container">
+      <aside className="learn-sidebar">
+        <h3>Syllabus</h3>
+        <ul>
+          {sections.map((sec) => (
+            <li key={sec.id}>
+              <a href={`#${sec.id}`} onClick={(e) => scrollToSection(e, sec.id)}>
+                {sec.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </aside>
+      
+      <main className="learn-content">
+        <h1>Mastering PCA</h1>
+
+        <section id="intro">
+          <h2>Introduction to Dimensionality Reduction</h2>
+          <p>Dimensionality reduction is the process of reducing the number of features in a dataset while retaining as much important information as possible. It is an <strong>unsupervised transformation</strong>—meaning it requires no predefined labels—to project high-dimensional data into a lower-dimensional space.</p>
+          <p>PCA (Principal Component Analysis) is the gold standard for this, transforming correlated features into linearly uncorrelated variables called <strong>Principal Components</strong>.</p>
+        </section>
+
+        <section id="concepts">
+          <h2>Key Concepts</h2>
+          <ul>
+            <li><strong>Variance:</strong> Measures how spread-out data is along a feature. High variance indicates more information.</li>
+            <li><strong>Covariance:</strong> Measures how two features change together.</li>
+            <li><strong>Covariance Matrix (&Sigma;):</strong> A symmetric matrix where each entry (i, j) is the covariance between feature i and feature j.</li>
+            <li><strong>Eigenvectors & Eigenvalues:</strong> Eigenvectors (v) define the directions of the new axes, while Eigenvalues (&lambda;) define the variance magnitude along those axes.</li>
+          </ul>
+        </section>
+
+        <section id="objective">
+          <h2>Objective of PCA</h2>
+          <p>PCA finds directions that maximize variance. The first principal component w₁ is found by solving for the direction that maximizes variance under a unit vector constraint:</p>
+          <div className="math-block">
+            max w<sup>T</sup>&Sigma;w subject to ||w|| = 1
+          </div>
+        </section>
+
+        <section id="steps">
+          <h2>The PCA Algorithm</h2>
+          <ol className="content-list">
+            <li><strong>Standardize:</strong> Mean-center the data so &mu; = 0. PCA is sensitive to scale.</li>
+            <li><strong>Covariance Matrix:</strong> Compute &Sigma; to capture relationships between pairs.</li>
+            <li><strong>Eigen Decomposition:</strong> Solve det(&Sigma; - &lambda;I) = 0 for &lambda; and v.</li>
+            <li><strong>Sort:</strong> Rank eigenvectors by &lambda; in descending order.</li>
+            <li><strong>Select:</strong> Choose the top <em>k</em> components based on explained variance.</li>
+            <li><strong>Project:</strong> Multiply the original data by the projection matrix W: Z = X &middot; W.</li>
+          </ol>
+        </section>
+
+        <section id="example">
+          <h2>Worked Example</h2>
+          <p>Consider a simple 2D dataset with 5 points:</p>
+          <div className="table-wrapper">
+            <table className="math-table">
+              <thead>
+                <tr><th>Point</th><th>X</th><th>Y</th><th>X - x̄</th><th>Y - ȳ</th><th>PC1 Score</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>P1</td><td>2.5</td><td>2.4</td><td>0.46</td><td>0.16</td><td>0.430</td></tr>
+                <tr><td>P2</td><td>0.5</td><td>0.7</td><td>-1.54</td><td>-1.54</td><td>-2.218</td></tr>
+                <tr><td>P3</td><td>2.2</td><td>2.9</td><td>0.16</td><td>0.66</td><td>0.593</td></tr>
+                <tr><td>P4</td><td>1.9</td><td>2.2</td><td>-0.14</td><td>-0.04</td><td>-0.124</td></tr>
+                <tr><td>P5</td><td>3.1</td><td>3.0</td><td>1.06</td><td>0.76</td><td>1.277</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>In this example, PC1 alone explains <strong>96.3%</strong> of the total variance (&lambda;₁=1.284, &lambda;₂=0.049), allowing us to reduce the data to 1D with minimal loss.</p>
+        </section>
+
+        <section id="selection">
+          <h2>Scree Plot & Component Selection</h2>
+          <p>A Scree Plot graphs eigenvalues against component numbers. To choose <em>k</em>, we use:</p>
+          <ul>
+            <li><strong>Kaiser's Rule:</strong> Retain components with &lambda; &gt; 1.</li>
+            <li><strong>Cumulative Variance:</strong> Retain until &ge; 95% variance is explained.</li>
+            <li><strong>Elbow Method:</strong> Find where the curve flattens.</li>
+          </ul>
+        </section>
+
+        <section id="reconstruction">
+          <h2>Reconstruction & Information Loss</h2>
+          <p>We can approximate the original data using: <strong>X<sub>approx</sub> = Z &middot; W<sup>T</sup> + &mu;</strong>.</p>
+          <p>The reconstruction error is the sum of the discarded eigenvalues. Choosing more components reduces error but increases dimensionality.</p>
+        </section>
+
+        <section id="assumptions">
+          <h2>Assumptions of PCA</h2>
+          <ul>
+            <li><strong>Linearity:</strong> Assumes components are linear combinations.</li>
+            <li><strong>Large Variance = Important:</strong> Treats high-variance as high-signal.</li>
+            <li><strong>Orthogonality:</strong> Components are assumed to be perpendicular.</li>
+            <li><strong>Scale Sensitivity:</strong> Requires prior standardization.</li>
+          </ul>
+        </section>
+
+        <section id="applications">
+          <h2>Real-World Applications</h2>
+          <ul className="content-list">
+            <li><strong>Image Compression:</strong> Reducing pixels via Eigenfaces.</li>
+            <li><strong>Genomics:</strong> Visualizing genetic distance across thousands of markers.</li>
+            <li><strong>Finance:</strong> Identifying hidden factors in stock price correlations.</li>
+            <li><strong>Anomaly Detection:</strong> Outliers often fall far from the PCA projection plane.</li>
+          </ul>
+        </section>
+
+        <section id="conclusion">
+          <h2>Conclusion</h2>
+          <p>PCA is an essential preprocessing step. By effectively compressing data and eliminating noise, it empowers more efficient machine learning. You are now ready to test these theories in the <strong>Simulation</strong> tab.</p>
+        </section>
+      </main>
+    </div>
+  );
+};
 
 const defaultCSV = `sepal_length,sepal_width,petal_length,petal_width
 5.1,3.5,1.4,0.2
@@ -183,7 +322,7 @@ const SimulatePage = () => {
   useEffect(() => {
     let timer;
     if (isPlaying && step < 5) {
-      timer = setTimeout(() => setStep((s) => s + 1), 2000); // Increased delay slightly to read tables
+      timer = setTimeout(() => setStep((s) => s + 1), 2000);
     } else if (step === 5) {
       setIsPlaying(false);
     }
@@ -437,14 +576,28 @@ const SimulatePage = () => {
   );
 };
 
-// ... Include LearnPage, DownloadPage, AboutPage as they were ...
+const DownloadPage = () => (
+  <main className="page-content center-content">
+    <h1>Download Latest Simulation</h1>
+  </main>
+);
+
+const AboutPage = () => (
+  <main className="page-content center-content">
+    <h1>About</h1>
+  </main>
+);
+
 const App = () => {
   const [currentPage, setCurrentPage] = useState('simulate');
 
   const renderPage = () => {
     switch (currentPage) {
       case 'home': return <HomePage />;
+      case 'learn': return <LearnPage />;
       case 'simulate': return <SimulatePage />;
+      case 'download': return <DownloadPage />;
+      case 'about': return <AboutPage />;
       default: return <HomePage />;
     }
   };

@@ -7,11 +7,12 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   color: #333;
-  overflow: hidden; /* Lock the main body to prevent double scrollbars */
+  background-color: #f5f5f7;
+  /* Removed overflow constraint to allow natural vertical scrolling */
 }
 
 .app-container {
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -25,7 +26,10 @@ body {
   background-color: #ffffff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   width: 100%;
-  z-index: 10;
+  /* Stick navbar to top across all pages */
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .navbar-logo {
@@ -67,7 +71,7 @@ body {
 .page-content {
   flex: 1;
   width: 100%;
-  background-color: #f5f5f7;
+  padding: 2rem;
 }
 
 .center-content {
@@ -75,8 +79,8 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
   text-align: center;
+  min-height: calc(100vh - 74px);
 }
 
 .center-content h1 {
@@ -90,13 +94,13 @@ body {
   color: #666;
 }
 
-/* Learn Page Specific Styles */
+/* --- Learn Page Specific Styles --- */
 .learn-container {
   display: flex;
   flex: 1;
   width: 100%;
-  overflow: hidden;
   background-color: #ffffff;
+  align-items: flex-start; /* Required for sticky children */
 }
 
 .learn-sidebar {
@@ -104,6 +108,10 @@ body {
   background-color: #fafafa;
   border-right: 1px solid #e0e0e0;
   padding: 2rem 1.5rem;
+  /* Keep sidebar visible while scrolling main content */
+  position: sticky;
+  top: 74px; /* Approximate height of navbar */
+  height: calc(100vh - 74px);
   overflow-y: auto;
 }
 
@@ -141,8 +149,7 @@ body {
 .learn-content {
   flex: 1;
   padding: 3rem 15%;
-  overflow-y: auto;
-  scroll-behavior: smooth;
+  background-color: #ffffff;
 }
 
 .learn-content h1 {
@@ -162,7 +169,7 @@ body {
 
 .learn-content section {
   margin-bottom: 4rem;
-  scroll-margin-top: 2rem; /* Adds padding when auto-scrolling to anchors */
+  scroll-margin-top: 100px; /* Offset for sticky navbar */
 }
 
 .learn-content h2 {
@@ -206,182 +213,7 @@ body {
   color: #2d3748;
 }
 
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 2rem 0;
-  background-color: #fff;
-  font-size: 0.95rem;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.data-table th, .data-table td {
-  padding: 12px 15px;
-  text-align: left;
-  border-bottom: 1px solid #edf2f7;
-}
-
-.data-table th {
-  background-color: #f8fafc;
-  color: #2d3748;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
-}
-
-.data-table tr:last-child td {
-  border-bottom: none;
-}
-
-.data-table tr:hover {
-  background-color: #f1f5f9;
-}
-
-/* Simulation Dashboard Styles */
-.sim-dashboard {
-  display: flex;
-  gap: 2rem;
-  width: 100%;
-  max-width: 1200px;
-  margin-top: 2rem;
-  text-align: left;
-}
-
-.sim-controls {
-  flex: 1;
-  background: #ffffff;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.csv-input {
-  width: 100%;
-  height: 200px;
-  margin: 1rem 0;
-  padding: 0.75rem;
-  font-family: monospace;
-  border: 1px solid #cbd5e0;
-  border-radius: 4px;
-  resize: vertical;
-}
-
-.sim-actions {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-.file-input {
-  display: none;
-}
-
-.upload-btn, .start-btn, .download-btn {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.2s;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.upload-btn {
-  background-color: #edf2f7;
-  color: #4a5568;
-}
-
-.upload-btn:hover {
-  background-color: #e2e8f0;
-}
-
-.start-btn {
-  background-color: #3182ce;
-  color: #ffffff;
-}
-
-.start-btn:hover:not(:disabled) {
-  background-color: #2b6cb0;
-}
-
-.start-btn:disabled {
-  background-color: #a0aec0;
-  cursor: not-allowed;
-}
-
-.sim-viewer {
-  flex: 2;
-  background: #ffffff;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  min-height: 500px;
-  display: flex;
-  flex-direction: column;
-}
-
-.sim-steps-container {
-  margin: 1.5rem 0;
-  min-height: 250px;
-}
-
-.sim-step {
-  padding: 0.75rem 1rem;
-  margin-bottom: 0.5rem;
-  background: #ebf8ff;
-  border-left: 4px solid #3182ce;
-  color: #2c5282;
-  border-radius: 0 4px 4px 0;
-}
-
-.fade-in {
-  animation: fadeIn 0.4s ease-out forwards;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateX(-10px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-.visualizations {
-  display: flex;
-  gap: 1rem;
-  justify-content: space-around;
-  margin-top: 1rem;
-}
-
-.chart-container h4 {
-  margin-bottom: 1rem;
-  color: #4a5568;
-  font-size: 0.95rem;
-}
-
-.raw-chart {
-  border: 1px solid #e2e8f0;
-  background: #f8fafc;
-  border-radius: 8px;
-}
-
-.download-section {
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #e2e8f0;
-  text-align: right;
-}
-
-.download-btn {
-  background-color: #38a169;
-  color: white;
-  padding: 0.75rem 1.5rem;
-}
-
-.download-btn:hover {
-  background-color: #2f855a;
-}
-
-/* Updated Simulation Dashboard Styles */
+/* --- Simulation Dashboard Styles --- */
 .sim-header {
   margin-bottom: 2rem;
   text-align: center;
@@ -389,7 +221,7 @@ body {
 
 .sim-dashboard {
   display: flex;
-  flex-direction: column; /* Forces vertical stacking */
+  flex-direction: column; /* Force vertical stacking */
   gap: 2rem;
   width: 100%;
   max-width: 1400px;
@@ -398,7 +230,7 @@ body {
 }
 
 .sim-controls {
-  width: 100%; /* Take full width */
+  width: 100%;
   background: #ffffff;
   padding: 1.5rem;
   border-radius: 8px;
@@ -463,7 +295,7 @@ body {
 }
 
 .sim-viewer {
-  width: 100%; /* Take full width */
+  width: 100%;
   background: #ffffff;
   padding: 2rem;
   border-radius: 8px;
@@ -494,7 +326,7 @@ body {
   font-size: 1.1rem;
 }
 
-/* Math Tables & Inner Workings */
+/* --- Math Tables & Matrices --- */
 .table-wrapper {
   width: 100%;
   overflow-x: auto; /* Allows horizontal scrolling for wide matrices */
