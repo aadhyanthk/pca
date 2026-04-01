@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Home, BookOpen, Activity, Download, Info, User} from 'lucide-react';
+import {Home, BookOpen, Activity, Download, Info} from 'lucide-react';
 import './App.css';
 
 // --- NATIVE PCA ENGINE ---
@@ -91,7 +91,7 @@ const ScatterPlot = ({data}) => {
       <h4>Projected Data (PC1 vs PC2)</h4>
       <svg width={width} height={height} className="raw-chart">
         {data.map((d, i) => (
-          <circle key={i} cx={scaleX(d.PC1)} cy={scaleY(d.PC2)} r={5} fill="#3182ce" opacity={0.7} />
+          <circle key={i} cx={scaleX(d.PC1)} cy={scaleY(d.PC2)} r={5} fill="#60a5fa" opacity={0.8} />
         ))}
       </svg>
     </div>
@@ -114,9 +114,9 @@ const BarChart = ({data}) => {
           const y = height - padding - barHeight;
           return (
             <g key={i}>
-              <rect x={x} y={y} width={barWidth} height={barHeight} fill="#38a169" />
-              <text x={x + barWidth/2} y={height - padding + 15} textAnchor="middle" fontSize="12" fill="#4a5568">PC{i+1}</text>
-              <text x={x + barWidth/2} y={y - 5} textAnchor="middle" fontSize="12" fill="#4a5568">{(d.ratio * 100).toFixed(1)}%</text>
+              <rect x={x} y={y} width={barWidth} height={barHeight} fill="#10b981" />
+              <text x={x + barWidth/2} y={height - padding + 15} textAnchor="middle" fontSize="12" fill="#e2e8f0">PC{i+1}</text>
+              <text x={x + barWidth/2} y={y - 5} textAnchor="middle" fontSize="12" fill="#e2e8f0">{(d.ratio * 100).toFixed(1)}%</text>
             </g>
           );
         })}
@@ -616,7 +616,7 @@ const AboutPage = () => {
 };
 
 const App = () => {
-  const [currentPage, setCurrentPage] = useState('about');
+  const [currentPage, setCurrentPage] = useState('home');
 
   const renderPage = () => {
     switch (currentPage) {
