@@ -128,11 +128,11 @@ const BarChart = ({data}) => {
 // --- NAVIGATION ---
 const Navbar = ({currentPage, setCurrentPage}) => {
   const navItems = [
-    {name: 'Home', id: 'home', icon: <Home size={18} />},
-    {name: 'Learn', id: 'learn', icon: <BookOpen size={18} />},
-    {name: 'Simulate', id: 'simulate', icon: <Activity size={18} />},
-    {name: 'Download', id: 'download', icon: <Download size={18} />},
-    {name: 'About', id: 'about', icon: <Info size={18} />}
+    {name: 'Home', id: 'home', icon: <Home size={18} />, isExternal: false},
+    {name: 'Learn', id: 'learn', icon: <BookOpen size={18} />, isExternal: false},
+    {name: 'Simulate', id: 'simulate', icon: <Activity size={18} />, isExternal: false},
+    {name: 'Download', id: 'download', icon: <Download size={18} />, isExternal: true, url: 'https://github.com/aadhyanthk/pca'},
+    {name: 'About', id: 'about', icon: <Info size={18} />, isExternal: false}
   ];
 
   return (
@@ -142,8 +142,14 @@ const Navbar = ({currentPage, setCurrentPage}) => {
         {navItems.map((item) => (
           <button
             key={item.id}
-            className={`nav-button ${currentPage === item.id ? 'active' : ''}`}
-            onClick={() => setCurrentPage(item.id)}
+            className={`nav-button ${currentPage === item.id && !item.isExternal ? 'active' : ''}`}
+            onClick={() => {
+              if (item.isExternal) {
+                window.open(item.url, '_blank', 'noopener,noreferrer');
+              } else {
+                setCurrentPage(item.id);
+              }
+            }}
           >
             {item.icon}
             <span>{item.name}</span>
@@ -167,7 +173,6 @@ const LearnPage = () => {
     e.preventDefault();
     const element = document.getElementById(id);
     if (element) {
-      // Adjusted scroll position to account for sticky navbar
       const y = element.getBoundingClientRect().top + window.scrollY - 90;
       window.scrollTo({top: y, behavior: 'smooth'});
     }
@@ -576,12 +581,6 @@ const SimulatePage = () => {
   );
 };
 
-const DownloadPage = () => (
-  <main className="page-content center-content">
-    <h1>Download Latest Simulation</h1>
-  </main>
-);
-
 const AboutPage = () => (
   <main className="page-content center-content">
     <h1>About</h1>
@@ -596,7 +595,6 @@ const App = () => {
       case 'home': return <HomePage />;
       case 'learn': return <LearnPage />;
       case 'simulate': return <SimulatePage />;
-      case 'download': return <DownloadPage />;
       case 'about': return <AboutPage />;
       default: return <HomePage />;
     }
