@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,700;12..96,800&display=swap');
+
+:root {
+  --bg: #07090f;
+  --surface: #0d1117;
+  --surface2: #111827;
+  --surface3: #1a2236;
+  --border: #1e2d45;
+  --border2: #253352;
+  --accent: #00e5ff;
+  --accent2: #8b5cf6;
+  --text: #e2e8f0;
+  --text-muted: #64748b;
+  --text-dim: #94a3b8;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: 100%; }
+body {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  height: 52px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  gap: 4px;
+  position: relative;
+  z-index: 100;
+}
+
+.nav-logo {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-right: 20px;
+}
+.nav-logo .hi { color: var(--accent); }
+.nav-logo .lo { color: var(--text-muted); font-weight: 400; font-size: 13px; }
+
+.nav-links { display: flex; gap: 2px; flex: 1; }
+.nav-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  color: var(--text-muted);
+  transition: all 0.18s;
+}
+.nav-btn:hover { background: var(--surface3); color: var(--text); }
+.nav-btn.active { background: var(--surface3); color: var(--accent); border: 1px solid var(--border2); }
+
+.page { display: none; flex: 1; overflow: hidden; flex-direction: column; }
+.page.active { display: flex; }
+
+/* Home Specifics */
+#page-home {
+  background: radial-gradient(ellipse at 20% 50%, #0d1f3c 0%, var(--bg) 60%),
+              radial-gradient(ellipse at 80% 20%, #1a0d3c 0%, transparent 50%);
+  position: relative;
+  overflow-y: auto;
+}
+.home-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  padding: 40px 24px;
+  position: relative;
+  z-index: 2;
+}
+.home-content { text-align: center; max-width: 760px; width: 100%; }
+.home-title { font-size: clamp(36px, 6vw, 68px); font-weight: 800; margin-bottom: 20px; }
+.home-title .grad {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 60%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.home-sub { color: var(--text-dim); line-height: 1.7; margin-bottom: 36px; }
+
+.btn-primary {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  padding: 12px 28px;
+  background: var(--accent);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.btn-primary:hover { background: #00c8e0; transform: translateY(-1px); }
+
+/* Sim Specifics */
+.sim-layout { display: flex; flex: 1; overflow: hidden; }
+.sim-canvas-wrap { flex: 1; position: relative; overflow: hidden; }
+#simCanvas { width: 100%; height: 100%; cursor: crosshair; display: block; }
+.sim-sidebar {
+  width: 300px;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+}
