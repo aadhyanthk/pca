@@ -48,20 +48,21 @@ const LearnPage = () => {
 
   const sections = [
     {id: 'intro', title: 'Introduction'},
-    {id: 'math', title: 'The Mathematics of PCA'},
-    {id: 'step-1', title: '1. Standardization'},
-    {id: 'step-2', title: '2. Covariance Matrix'},
-    {id: 'step-3', title: '3. Eigen Decomposition'},
-    {id: 'step-4', title: '4. Feature Vector'},
-    {id: 'step-5', title: '5. Recasting Data'},
-    {id: 'use-cases', title: 'Example Use Cases'},
+    {id: 'concepts', title: 'Key Concepts'},
+    {id: 'objective', title: 'Objective of PCA'},
+    {id: 'steps', title: 'The Algorithm'},
+    {id: 'example', title: 'Worked Example'},
+    {id: 'selection', title: 'Scree Plot & Selection'},
+    {id: 'reconstruction', title: 'Reconstruction'},
+    {id: 'assumptions', title: 'Assumptions'},
+    {id: 'applications', title: 'Applications'},
     {id: 'conclusion', title: 'Conclusion'}
   ];
 
   return (
     <div className="learn-container">
       <aside className="learn-sidebar">
-        <h3>Algorithm Steps</h3>
+        <h3>Syllabus</h3>
         <ul>
           {sections.map((sec) => (
             <li key={sec.id}>
@@ -74,73 +75,101 @@ const LearnPage = () => {
       </aside>
       
       <main className="learn-content">
-        <h1>Learn Principal Component Analysis</h1>
+        <h1>Mastering PCA</h1>
 
         <section id="intro">
-          <h2>Introduction</h2>
-          <p>Principal Component Analysis (PCA) is a powerful statistical technique used primarily for dimensionality reduction in machine learning and data analysis. When dealing with complex datasets containing numerous variables, it becomes challenging to visualize and process the information. PCA elegantly solves this by transforming the large set of variables into a smaller, more manageable set called "principal components," while retaining as much of the original dataset's variation as possible.</p>
+          <h2>Introduction to Dimensionality Reduction</h2>
+          <p>Dimensionality reduction is the process of reducing the number of features in a dataset while retaining as much important information as possible. It is an <strong>unsupervised transformation</strong>—meaning it requires no predefined labels—to project high-dimensional data into a lower-dimensional space.</p>
+          <p>PCA (Principal Component Analysis) is the gold standard for this, transforming correlated features into linearly uncorrelated variables called <strong>Principal Components</strong>.</p>
         </section>
 
-        <section id="math">
-          <h2>The Mathematics of PCA</h2>
-          <p className="intro-text">Here is the mechanical breakdown of the algorithm, detailing how data is transformed step by step.</p>
+        <section id="concepts">
+          <h2>Key Concepts</h2>
+          <ul>
+            <li><strong>Variance:</strong> Measures how spread-out data is along a feature. High variance indicates more information.</li>
+            <li><strong>Covariance:</strong> Measures how two features change together.</li>
+            <li><strong>Covariance Matrix (&Sigma;):</strong> A symmetric matrix where each entry (i, j) is the covariance between feature i and feature j.</li>
+            <li><strong>Eigenvectors & Eigenvalues:</strong> Eigenvectors (v) define the directions of the new axes, while Eigenvalues (&lambda;) define the variance magnitude along those axes.</li>
+          </ul>
         </section>
 
-        <section id="step-1">
-          <h2>1. Standardization</h2>
-          <p>Before applying PCA, we must standardize the range of the continuous initial variables so that each contributes equally to the analysis. We achieve this by subtracting the mean and dividing by the standard deviation.</p>
+        <section id="objective">
+          <h2>Objective of PCA</h2>
+          <p>PCA finds directions that maximize variance. The first principal component w₁ is found by solving for the direction that maximizes variance under a unit vector constraint:</p>
           <div className="math-block">
-            Z = (X - &mu;) / &sigma;
+            max w<sup>T</sup>&Sigma;w subject to ||w|| = 1
           </div>
         </section>
 
-        <section id="step-2">
-          <h2>2. Covariance Matrix Computation</h2>
-          <p>The goal is to understand how the variables of the input dataset are varying from the mean with respect to each other. The covariance matrix mathematically captures the correlations between all possible pairs of variables.</p>
-          <div className="math-block">
-            C = (Z<sup>T</sup> &middot; Z) / (n - 1)
-          </div>
+        <section id="steps">
+          <h2>The PCA Algorithm</h2>
+          <ol className="content-list">
+            <li><strong>Standardize:</strong> Mean-center the data so &mu; = 0. PCA is sensitive to scale.</li>
+            <li><strong>Covariance Matrix:</strong> Compute &Sigma; to capture relationships between pairs.</li>
+            <li><strong>Eigen Decomposition:</strong> Solve det(&Sigma; - &lambda;I) = 0 for &lambda; and v.</li>
+            <li><strong>Sort:</strong> Rank eigenvectors by &lambda; in descending order.</li>
+            <li><strong>Select:</strong> Choose the top <em>k</em> components based on explained variance.</li>
+            <li><strong>Project:</strong> Multiply the original data by the projection matrix W: Z = X &middot; W.</li>
+          </ol>
         </section>
 
-        <section id="step-3">
-          <h2>3. Eigen Decomposition</h2>
-          <p>We compute the eigenvectors and eigenvalues of the covariance matrix to identify the principal components. Eigenvectors represent the directions of maximum variance, while eigenvalues define their magnitude.</p>
-          <div className="math-block">
-            C &middot; v = &lambda; &middot; v
-          </div>
-          <p><em>Where 'v' is the eigenvector and '&lambda;' is the eigenvalue.</em></p>
+        <section id="example">
+          <h2>Worked Example</h2>
+          <p>Consider a simple 2D dataset with 5 points:</p>
+          <table className="data-table">
+            <thead>
+              <tr><th>Point</th><th>X</th><th>Y</th><th>X - x̄</th><th>Y - ȳ</th><th>PC1 Score</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>P1</td><td>2.5</td><td>2.4</td><td>0.46</td><td>0.16</td><td>0.430</td></tr>
+              <tr><td>P2</td><td>0.5</td><td>0.7</td><td>-1.54</td><td>-1.54</td><td>-2.218</td></tr>
+              <tr><td>P3</td><td>2.2</td><td>2.9</td><td>0.16</td><td>0.66</td><td>0.593</td></tr>
+              <tr><td>P4</td><td>1.9</td><td>2.2</td><td>-0.14</td><td>-0.04</td><td>-0.124</td></tr>
+              <tr><td>P5</td><td>3.1</td><td>3.0</td><td>1.06</td><td>0.76</td><td>1.277</td></tr>
+            </tbody>
+          </table>
+          <p>In this example, PC1 alone explains <strong>96.3%</strong> of the total variance (&lambda;₁=1.284, &lambda;₂=0.049), allowing us to reduce the data to 1D with minimal loss.</p>
         </section>
 
-        <section id="step-4">
-          <h2>4. Feature Vector Selection</h2>
-          <p>We order the eigenvectors by their corresponding eigenvalues in descending order. This orders the principal components by significance. We discard the components of lesser significance and form a matrix of vectors, called the Feature Vector (W).</p>
-          <div className="math-block">
-            W = [v<sub>1</sub>, v<sub>2</sub>, ..., v<sub>k</sub>]
-          </div>
+        <section id="selection">
+          <h2>Scree Plot & Component Selection</h2>
+          <p>A Scree Plot graphs eigenvalues against component numbers. To choose <em>k</em>, we use:</p>
+          <ul>
+            <li><strong>Kaiser's Rule:</strong> Retain components with &lambda; &gt; 1.</li>
+            <li><strong>Cumulative Variance:</strong> Retain until &ge; 95% variance is explained.</li>
+            <li><strong>Elbow Method:</strong> Find where the curve flattens.</li>
+          </ul>
         </section>
 
-        <section id="step-5">
-          <h2>5. Recasting the Data</h2>
-          <p>Finally, we use the Feature Vector to reorient the data from the original axes to the ones represented by the principal components. This is done by multiplying the transposed standardized dataset by the Feature Vector.</p>
-          <div className="math-block">
-            Y = Z &middot; W
-          </div>
+        <section id="reconstruction">
+          <h2>Reconstruction & Information Loss</h2>
+          <p>We can approximate the original data using: <strong>X<sub>approx</sub> = Z &middot; W<sup>T</sup> + &mu;</strong>.</p>
+          <p>The reconstruction error is the sum of the discarded eigenvalues. Choosing more components reduces error but increases dimensionality.</p>
         </section>
 
-        <section id="use-cases">
-          <h2>Example Use Cases</h2>
-          <p>PCA is highly versatile and is deployed across various domains to streamline data:</p>
+        <section id="assumptions">
+          <h2>Assumptions of PCA</h2>
+          <ul>
+            <li><strong>Linearity:</strong> Assumes components are linear combinations.</li>
+            <li><strong>Large Variance = Important:</strong> Treats high-variance as high-signal.</li>
+            <li><strong>Orthogonality:</strong> Components are assumed to be perpendicular.</li>
+            <li><strong>Scale Sensitivity:</strong> Requires prior standardization.</li>
+          </ul>
+        </section>
+
+        <section id="applications">
+          <h2>Real-World Applications</h2>
           <ul className="content-list">
-            <li><strong>Image Compression:</strong> Reducing the number of pixels required to render an image without losing significant visual fidelity.</li>
-            <li><strong>Genomics:</strong> Visualizing genetic distance and relatedness between populations by condensing thousands of DNA markers.</li>
-            <li><strong>Finance:</strong> Identifying underlying market trends and managing risk by analyzing the correlations between different stocks or assets.</li>
-            <li><strong>Facial Recognition:</strong> Extracting the most critical features from facial images (Eigenfaces) to match identities efficiently.</li>
+            <li><strong>Image Compression:</strong> Reducing pixels via Eigenfaces.</li>
+            <li><strong>Genomics:</strong> Visualizing genetic distance across thousands of markers.</li>
+            <li><strong>Finance:</strong> Identifying hidden factors in stock price correlations.</li>
+            <li><strong>Anomaly Detection:</strong> Outliers often fall far from the PCA projection plane.</li>
           </ul>
         </section>
 
         <section id="conclusion">
           <h2>Conclusion</h2>
-          <p>By effectively compressing data and eliminating noise, PCA serves as an essential preprocessing step for many advanced machine learning models. Understanding its underlying mechanics allows us to make informed decisions about when and how to apply dimensionality reduction to our datasets. Once you are comfortable with these concepts, you can proceed to the Simulation environment to observe these transformations in action.</p>
+          <p>PCA is an essential preprocessing step. By effectively compressing data and eliminating noise, it empowers more efficient machine learning. You are now ready to test these theories in the <strong>Simulation</strong> tab.</p>
         </section>
       </main>
     </div>
